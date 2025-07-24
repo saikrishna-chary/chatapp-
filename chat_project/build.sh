@@ -3,7 +3,7 @@
 set -o errexit
 
 # Install dependencies
-pip install -r chat_project/requirments.txt
+pip install -r requirements.txt
 
 # Run collectstatic
-python chat_project/manage.py collectstatic --no-input
+python manage.py collectstatic --no-input

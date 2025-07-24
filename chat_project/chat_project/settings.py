@@ -185,7 +185,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # Load environment variables from the secret file (Render or local)
-load_dotenv("/etc/secrets/.env")  # Use this on Render
+load_dotenv()  # Use this on Render
 # load_dotenv()  # Uncomment if running locally and using local .env
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -287,3 +287,10 @@ AUTH_USER_MODEL = 'chat.CustomUser'
 
 # AUTO FIELD
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+import dj_database_url
+
+DATABASES = {
+    'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+}

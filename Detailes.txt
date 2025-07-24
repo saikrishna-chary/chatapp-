@@ -1,0 +1,25 @@
+superuseranme = chart
+email = chart123@gmail.com
+password = chart
+
+port number = 6379
+
+
+
+Name: chat-redis
+
+redis-cli --tls -u redis://default:AUQnAAIjcDE0MzQxMzZjM2RjNzA0OTc3YTQxZmFjNDQ5ZTY0MDBjNHAxMA@stable-elk-17447.upstash.io:6379
+
+
+echo "# chatapp-" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/saikrishna-chary/chatapp-.git
+git push -u origin main
+
+
+git remote add origin https://github.com/saikrishna-chary/chatapp-.git
+git branch -M main
+git push -u origin main
