@@ -1,5 +1,0 @@
-superuseranme = chart
-email = chart123@gmail.com
-password = chart
-
-port number = 6379
