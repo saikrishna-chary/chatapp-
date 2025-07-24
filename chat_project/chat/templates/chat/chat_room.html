@@ -1,0 +1,57 @@
+<h2>{{ display_name }}</h2>
+
+<a href="{% url 'dashboard' %}">Back</a>
+
+<div id="chat-box" style="height:300px; overflow:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+    {% for msg in messages %}
+        <p>
+            <strong>{{ msg.sender.name }}</strong>: {{ msg.content }}
+            {% if msg.file %}
+                <br>
+                {% if msg.file.url|lower|endswith:".jpg" or msg.file.url|lower|endswith:".jpeg" or msg.file.url|lower|endswith:".png" %}
+                    <img src="{{ msg.file.url }}" width="150" />
+                {% else %}
+                    <a href="{{ msg.file.url }}" download>📎 Download File</a>
+                {% endif %}
+            {% endif %}
+        </p>
+    {% endfor %}
+</div>
+
+<!-- Real-time message input -->
+<input type="text" id="messageInput" placeholder="Type message..." />
+<button onclick="sendMessage()">Send</button>
+
+<!-- File upload form -->
+<form id="uploadForm" method="POST" enctype="multipart/form-data" action="{% url 'send_message' room.id %}">
+    {% csrf_token %}
+    <input type="text" name="content" placeholder="Message..." />
+    <input type="file" name="file" />
+    <button type="submit">Send File</button>
+</form>
+
+<div id="typingStatus"></div>
+
+<script>
+    let typingTimeout;
+    const roomSocket = new WebSocket(
+        'ws://' + window.location.host + '/ws/chat/' + roomId + '/'
+    );
+
+    document.getElementById('messageInput').addEventListener('input', function () {
+        roomSocket.send(JSON.stringify({ 'typing': true }));
+        clearTimeout(typingTimeout);
+        typingTimeout = setTimeout(() => {
+            roomSocket.send(JSON.stringify({ 'typing': false }));
+        }, 1000);
+    });
+
+    roomSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        if (data.typing) {
+            document.getElementById("typingStatus").innerText = data.user + " is typing...";
+        } else if (data.typing === false) {
+            document.getElementById("typingStatus").innerText = '';
+        }
+    };
+</script>

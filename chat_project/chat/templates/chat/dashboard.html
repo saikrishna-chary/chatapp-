@@ -1,0 +1,40 @@
+<h2>Welcome {{ request.user.name }}</h2>
+
+<h3>Create Group</h3>
+<form method="POST">
+    {% csrf_token %}
+    <label>Group Name:</label><br>
+    <input type="text" name="group_name" required><br>
+
+    <label>Select Members:</label><br>
+    {% for user in users %}
+        <input type="checkbox" name="members" value="{{ user.id }}"> {{ user.name }}<br>
+    {% endfor %}
+
+    <button type="submit">Create Group</button>
+</form>
+
+<hr>
+
+<h3>Your Chat Rooms</h3>
+<ul>
+    {% for room in rooms %}
+        <li>
+            {{ room.name }} — <a href="{% url 'chat_room' room.id %}">Open</a>
+        </li>
+    {% empty %}
+        <li>No chats yet.</li>
+    {% endfor %}
+</ul>
+
+<script>
+    const presenceSocket = new WebSocket('ws://' + window.location.host + '/ws/presence/');
+
+    presenceSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const userEl = document.getElementById('user-' + data.user_id);
+        if (userEl) {
+            userEl.innerText = data.status === 'online' ? '🟢 Online' : '⚫ Offline';
+        }
+    };
+</script>
