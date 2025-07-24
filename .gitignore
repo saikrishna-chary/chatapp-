@@ -5,5 +5,4 @@ venv/
 media/
 db.sqlite3
 staticfiles/
-.idea/
-".env" 
+.idea/ 
